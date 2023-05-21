@@ -11,9 +11,10 @@ public class UsuarioService {
     ArrayList<Usuario> usuarios = new ArrayList<>();
 
     public Usuario getUsuariosByCpf(String cpf) {
-        var usuario = (Usuario) usuarios.stream()
+        var usuario = usuarios.stream()
                 .filter(u -> u.getCpf().equalsIgnoreCase(cpf))
-                .collect(Collectors.toList());
+                .findFirst()
+                .orElse(null);
 
         if (usuario == null) {
             throw new RuntimeException("Usuario não encontrado");
@@ -22,7 +23,10 @@ public class UsuarioService {
         return usuario;
     }
 
-    public void cadastrarUsuario(UsuarioDto dto) {
-        var usuario = Usuario.of(dto);
+    public Usuario cadastrarUsuario(UsuarioDto dto) {
+        var novoUsuario = Usuario.of(dto);
+        usuarios.add(novoUsuario);
+        System.out.println("Usuario criado com sucesso!");
+        return novoUsuario;
     }
 }
