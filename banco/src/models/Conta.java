@@ -1,5 +1,7 @@
 package models;
 
+import dto.ContaDto;
+
 public class Conta {
 
     Integer id;
@@ -8,21 +10,36 @@ public class Conta {
     Float saldo;
     Float credito;
     Float limite;
+    Usuario usuario;
 
-    public Conta(Integer id, Integer agencia, Integer numConta, Float saldo, Float credito, Float limite) {
+    public Conta(Integer id, Integer agencia, Integer numConta, Float saldo, Float credito, Float limite, Usuario usuario) {
         this.id = id;
         this.agencia = agencia;
         this.numConta = numConta;
         this.saldo = saldo;
         this.credito = credito;
         this.limite = limite;
+        this.usuario = usuario;
     }
 
-    public Conta() {
-
+    public Usuario getUsuario() {
+        return usuario;
     }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
+    public Conta() {}
+
+    public static Conta of (ContaDto dto) {
+        var conta = new Conta();
+        conta.setId(dto.getId());
+        conta.setNumConta(dto.getNumConta());
+        conta.setLimite(dto.getLimite());
+        conta.setUsuario(new Usuario(dto.getUsuarioId()));
+        return conta;
+    }
 
     public Integer getId() {
         return id;

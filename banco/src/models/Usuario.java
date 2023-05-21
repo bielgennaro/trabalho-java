@@ -14,9 +14,9 @@ public class Usuario extends Conta {
     List<Conta> contas;
 
     public Usuario(Integer id, Integer agencia, Integer numConta, Float saldo,
-                   Float credito, Float limite, Integer id1, String nome,
+                   Float credito, Float limite, Usuario usuario, Integer id1, String nome,
                    LocalDate dataNascimento, String cpf, List<Conta> contas) {
-        super(id, agencia, numConta, saldo, credito, limite);
+        super(id, agencia, numConta, saldo, credito, limite, usuario);
         this.id = id1;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -26,6 +26,10 @@ public class Usuario extends Conta {
 
     public Usuario() {
         super();
+    }
+
+    public Usuario(Integer id) {
+        this.id = id;
     }
 
     public static Usuario of(UsuarioDto dto) {
