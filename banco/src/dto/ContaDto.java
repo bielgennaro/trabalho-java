@@ -1,28 +1,18 @@
-package models;
+package dto;
 
-public class Conta {
+public class ContaDto {
 
     Integer id;
     Integer agencia;
     Integer numConta;
-    Float saldo;
     Float credito;
-    Float limite;
 
-    public Conta(Integer id, Integer agencia, Integer numConta, Float saldo, Float credito, Float limite) {
+    public ContaDto(Integer id, Integer agencia, Integer numConta, Float credito) {
         this.id = id;
         this.agencia = agencia;
         this.numConta = numConta;
-        this.saldo = saldo;
         this.credito = credito;
-        this.limite = limite;
     }
-
-    public Conta() {
-
-    }
-
-
 
     public Integer getId() {
         return id;
@@ -48,14 +38,6 @@ public class Conta {
         this.numConta = numConta;
     }
 
-    public Float getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Float saldo) {
-        this.saldo = saldo;
-    }
-
     public Float getCredito() {
         return credito;
     }
@@ -63,13 +45,4 @@ public class Conta {
     public void setCredito(Float credito) {
         this.credito = credito;
     }
-
-    public Float getLimite() {
-        return limite;
-    }
-
-    public void setLimite(Float limite) {
-        this.limite = limite;
-    }
-
 }
