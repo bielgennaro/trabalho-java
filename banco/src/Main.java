@@ -1,3 +1,4 @@
+import models.Conta;
 import models.Usuario;
 import service.ContaService;
 import service.ServicoService;
@@ -9,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         Usuario usuario = new Usuario();
+        Conta conta = new Conta();
 
         ContaService contaService;
         UsuarioService usuarioService;
@@ -32,7 +34,7 @@ public class Main {
                 System.out.println("+---------------------------+");
                 System.out.println(" Digite sua conta:           ");
                 System.out.println("+---------------------------+");
-                var conta = scanner.nextInt();
+                var c = scanner.nextInt();
                 service.logarUsuario(cpf, conta);
 
             case 2:
