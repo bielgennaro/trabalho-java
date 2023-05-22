@@ -1,3 +1,4 @@
+import models.Usuario;
 import service.ContaService;
 import service.ServicoService;
 import service.UsuarioService;
@@ -6,6 +7,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        Usuario usuario = new Usuario();
 
         ContaService contaService;
         UsuarioService usuarioService;
@@ -31,6 +34,18 @@ public class Main {
                 System.out.println("+---------------------------+");
                 var conta = scanner.nextInt();
                 service.logarUsuario(cpf, conta);
+
+            case 2:
+                System.out.println("+---------------------------+");
+                System.out.println("Escolha a operação que deseja fazer");
+                System.out.println("1- Listar seus dados          ");
+                System.out.println("2- Transferencia PIX          ");
+                System.out.println("3- Ajuda                      ");
+                var opcao1 = scanner.nextInt();
+            case 3:
+                System.out.println("+---------------------------+");
+                System.out.println("Olá " + usuario.getNome() + " gostaria de listar seus dados?: ");
+                System.out.println("+---------------------------+");
         }
 
 

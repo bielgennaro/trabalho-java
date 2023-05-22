@@ -22,6 +22,10 @@ public class ContaDto {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getUsuarioId() {
         return usuarioId;
     }
@@ -30,12 +34,12 @@ public class ContaDto {
         this.usuarioId = usuarioId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getAgencia() {
         return agencia;
+    }
+
+    public void setAgencia(Integer agencia) {
+        this.agencia = agencia;
     }
 
     public Float getLimite() {
@@ -44,10 +48,6 @@ public class ContaDto {
 
     public void setLimite(Float limite) {
         this.limite = limite;
-    }
-
-    public void setAgencia(Integer agencia) {
-        this.agencia = agencia;
     }
 
     public Integer getNumConta() {

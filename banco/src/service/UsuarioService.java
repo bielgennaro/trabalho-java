@@ -4,7 +4,6 @@ import dto.UsuarioDto;
 import models.Usuario;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class UsuarioService {
 

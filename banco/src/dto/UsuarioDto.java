@@ -1,7 +1,5 @@
 package dto;
 
-import models.Usuario;
-
 public class UsuarioDto {
 
     Integer id;
