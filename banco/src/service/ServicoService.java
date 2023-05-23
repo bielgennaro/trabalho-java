@@ -1,15 +1,17 @@
 package service;
 
 import models.Conta;
+import models.Usuario;
 
 public class ServicoService {
 
+    Conta conta = new Conta();
     private UsuarioService usuarioService;
     private ContaService contaService;
 
-    public void logarUsuario(String cpf, Conta conta) {
-        usuarioService.getUsuariosByCpf(cpf);
-        contaService.getContaByNumConta(conta);
+    public void logarUsuario(String cpf, Conta saldo) {
+        Usuario usuario = usuarioService.getUsuariosByCpf(cpf);
+        Conta conta = contaService.getContaByNumConta(saldo.getNumConta());
     }
 
     public void Pix(Integer conta, Float valor, Integer contaEnviar) {
@@ -25,12 +27,10 @@ public class ServicoService {
     private void validarSaldo(Float saldo, Conta conta) {
         if (conta.getSaldo() < saldo) {
             throw new RuntimeException("Saldo insuficiente");
-
         }
     }
 
-    public void Boleto(Integer conta, Float valor, Integer id) {
+    public void Deposito(Float saldo) {
 
-        36
     }
 }

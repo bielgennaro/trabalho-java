@@ -28,4 +28,18 @@ public class UsuarioService {
         System.out.println("Usuario criado com sucesso!");
         return novoUsuario;
     }
+
+    public Usuario logarUsuario(UsuarioDto dto) {
+        Object nome = dto.getNome();
+        Object cpf = dto.getCpf();
+
+        for (Usuario usuario : usuarios) {
+            if (usuario.getNome().equals(nome) && usuario.getCpf().equals(cpf)) {
+                System.out.println("Bem vindo " + nome);
+            }else{
+                throw new RuntimeException("Credenciais invalidas");
+            }
+        }
+        return null;
+    }
 }
