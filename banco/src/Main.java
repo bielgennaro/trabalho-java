@@ -48,8 +48,7 @@ public class Main {
                 System.out.println("+---------------------------+");
                 System.out.println("Olá " + usuario.getNome() + " gostaria de listar seus dados?: ");
                 System.out.println("+---------------------------+");
+
         }
-
-
     }
 }
