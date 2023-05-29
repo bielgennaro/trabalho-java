@@ -1,18 +1,20 @@
 import service.ContaService;
 import service.ServicoService;
+import service.ClienteService;
 import service.UsuarioService;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        ContaService contaService;
-        UsuarioService usuarioService;
-        ServicoService service = null;
+        var contaService = new ContaService();
+        var clienteService = new ClienteService();
+        var servicoService = new ServicoService();
+        var usuarioService = new UsuarioService();
 
         var scanner = new Scanner(System.in);
-        var opcao = scanner.nextInt();
 
         System.out.println("+---------------------------+");
         System.out.println(" Selecione a opção desejada: ");
@@ -20,19 +22,16 @@ public class Main {
         System.out.println(" 2- Criar nova conta         ");
         System.out.println("+---------------------------+");
 
+        var opcao = scanner.nextInt();
+
         switch (opcao) {
             case 1:
-                System.out.println("+---------------------------+");
-                System.out.println(" Digite seu cpf:             ");
-                System.out.println("+---------------------------+");
-                var cpf = scanner.next();
-                System.out.println("+---------------------------+");
-                System.out.println(" Digite sua conta:           ");
-                System.out.println("+---------------------------+");
-                var conta = scanner.nextInt();
-                service.logarUsuario(cpf, conta);
+                usuarioService.logarUsuario();
+                break;
+
+            case 2:
+                usuarioService.cadastrarUsuario();
+                break;
         }
-
-
     }
 }

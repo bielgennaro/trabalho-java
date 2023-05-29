@@ -10,23 +10,18 @@ public class Conta {
     Float saldo;
     Float credito;
     Float limite;
+    Integer senha;
     Usuario usuario;
 
-    public Conta(Integer id, Integer agencia, Integer numConta, Float saldo, Float credito, Float limite, Usuario usuario) {
+    public Conta(Integer id, Integer agencia, Integer numConta,
+                 Float saldo, Float credito, Float limite,
+                 Integer senha, Usuario usuario) {
         this.id = id;
         this.agencia = agencia;
         this.numConta = numConta;
         this.saldo = saldo;
         this.credito = credito;
         this.limite = limite;
-        this.usuario = usuario;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
@@ -89,4 +84,19 @@ public class Conta {
         this.limite = limite;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Integer getSenha() {
+        return senha;
+    }
+
+    public void setSenha(Integer senha) {
+        this.senha = senha;
+    }
 }
