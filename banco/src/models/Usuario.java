@@ -1,27 +1,24 @@
 package models;
 
 import dto.UsuarioDto;
+import enums.ETipoUsuario;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public class Usuario extends Conta {
+public class Usuario {
 
     Integer id;
     String nome;
     LocalDate dataNascimento;
     String cpf;
-    List<Conta> contas;
+    ETipoUsuario tipoUsuario;
 
-    public Usuario(Integer id, Integer agencia, Integer numConta, Float saldo,
-                   Float credito, Float limite, Usuario usuario, Integer id1, String nome,
-                   LocalDate dataNascimento, String cpf, List<Conta> contas) {
-        super(id, agencia, numConta, saldo, credito, limite, usuario);
-        this.id = id1;
+    public Usuario(Integer id, String nome, LocalDate dataNascimento, String cpf, ETipoUsuario tipoUsuario) {
+        this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
-        this.contas = contas;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public Usuario() {
@@ -77,11 +74,11 @@ public class Usuario extends Conta {
         this.cpf = cpf;
     }
 
-    public List<Conta> getContas() {
-        return contas;
+    public ETipoUsuario getTipoUsuario() {
+        return tipoUsuario;
     }
 
-    public void setContas(List<Conta> contas) {
-        this.contas = contas;
+    public void setTipoUsuario(ETipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 }
