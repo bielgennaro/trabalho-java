@@ -1,12 +1,8 @@
 package service;
 
 import dto.ContaDto;
-import dto.UsuarioDto;
 import enums.ETipoUsuario;
 import models.Usuario;
-
-import java.util.Collections;
-import java.util.Map;
 
 public class ServicoService {
 

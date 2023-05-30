@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class ContaService {
 
-    private ClienteService clienteService;
     ArrayList<Conta> contas = new ArrayList<>();
+    private ClienteService clienteService;
 
     public Conta getContaByNumConta(Integer numConta) {
         var conta = contas.stream()
@@ -36,8 +36,8 @@ public class ContaService {
         return novaConta;
     }
 
-    private Integer gerarId () {
-        var contaId =  contas.size();
+    private Integer gerarId() {
+        var contaId = contas.size();
         return contaId + 1;
     }
 }

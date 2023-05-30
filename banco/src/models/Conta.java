@@ -25,9 +25,10 @@ public class Conta {
         this.usuario = usuario;
     }
 
-    public Conta() {}
+    public Conta() {
+    }
 
-    public static Conta of (ContaDto dto) {
+    public static Conta of(ContaDto dto) {
         var conta = new Conta();
         conta.setId(dto.getId());
         conta.setNumConta(dto.getNumConta());
