@@ -1,17 +1,21 @@
 package dto;
 
+import enums.ETipoUsuario;
+
 public class UsuarioDto {
 
     Integer id;
     String nome;
     String cpf;
     String dataNascimento;
+    ETipoUsuario tipoUsuario;
 
-    public UsuarioDto(Integer id, String nome, String cpf, String dataNascimento) {
+    public UsuarioDto(Integer id, String nome, String cpf, String dataNascimento, ETipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public Integer getId() {
@@ -44,5 +48,13 @@ public class UsuarioDto {
 
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public ETipoUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(ETipoUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 }

@@ -1,45 +1,93 @@
 package service;
 
 import dto.UsuarioDto;
+import enums.ETipoUsuario;
 import models.Usuario;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class UsuarioService {
 
-    ArrayList<Usuario> usuarios = new ArrayList<>();
+    private static Usuario usuarioAutenticado;
+    private final ClienteService clienteService = new ClienteService();
+    private final ContaService contaService = new ContaService();
+    private final FuncionarioService funcionarioService = new FuncionarioService();
 
-    public Usuario getUsuariosByCpf(String cpf) {
-        var usuario = usuarios.stream()
-                .filter(u -> u.getCpf().equalsIgnoreCase(cpf))
-                .findFirst()
-                .orElse(null);
+    public void logarUsuario() throws IOException {
+        var scanner = new Scanner(System.in);
 
-        if (usuario == null) {
-            throw new RuntimeException("Usuario não encontrado");
-        }
+        while (usuarioAutenticado == null) {
+            System.out.println("+---------------------------+");
+            System.out.println(" Digite seu cpf:             ");
+            System.out.println("+---------------------------+");
 
-        return usuario;
-    }
+            var cpf = scanner.next();
 
-    public Usuario cadastrarUsuario(UsuarioDto dto) {
-        var novoUsuario = Usuario.of(dto);
-        usuarios.add(novoUsuario);
-        System.out.println("Usuario criado com sucesso!");
-        return novoUsuario;
-    }
+            System.out.println("+---------------------------+");
+            System.out.println(" Digite sua conta:           ");
+            System.out.println("+---------------------------+");
 
-    public Usuario logarUsuario(UsuarioDto dto) {
-        Object nome = dto.getNome();
-        Object cpf = dto.getCpf();
+            var conta = scanner.nextInt();
 
-        for (Usuario usuario : usuarios) {
-            if (usuario.getNome().equals(nome) && usuario.getCpf().equals(cpf)) {
-                System.out.println("Bem vindo " + nome);
-            }else{
-                throw new RuntimeException("Credenciais invalidas");
+            var usuario = clienteService.getUsuariosByCpf(cpf);
+            var contaAutenticada = contaService.getContaByNumConta(conta);
+
+            if (usuario == null || contaAutenticada == null) {
+                System.out.println("Credenciais invalidas");
             }
+
+            usuarioAutenticado = usuario;
         }
+
+        System.out.println("Bem vindo " + usuarioAutenticado.getNome());
+    }
+
+    public Usuario getUsuarioAutenticado() {
+        if (usuarioAutenticado != null) {
+            return usuarioAutenticado;
+        }
+
         return null;
     }
+
+    public void cadastrarUsuario() {
+        var scanner = new Scanner(System.in);
+
+        System.out.println("+---------------------------+");
+        System.out.println(" Digite seu nome:            ");
+        System.out.println("+---------------------------+");
+        var nome = scanner.next();
+
+        System.out.println("+---------------------------+");
+        System.out.println(" Digite seu cpf:             ");
+        System.out.println("+---------------------------+");
+        var cpf = scanner.next();
+
+        System.out.println("+---------------------------------+");
+        System.out.println(" Digite sua data de nascimento:    ");
+        System.out.println("+---------------------------------+");
+        var dataNascimento = scanner.next();
+
+        System.out.println("+---------------------------+");
+        System.out.println("Selecione o tipo de conta    ");
+        System.out.println(" 1- Cliente                  ");
+        System.out.println(" 2- Funcionario              ");
+        System.out.println("+---------------------------+");
+        var opcao = scanner.nextInt();
+
+        switch (opcao) {
+            case 1:
+                var clienteDto = new UsuarioDto(1, nome, cpf, dataNascimento, ETipoUsuario.CLIENTE);
+                clienteService.salvar(clienteDto);
+                break;
+
+            case 2:
+                var funcionarioDto = new UsuarioDto(1, nome, cpf, dataNascimento, ETipoUsuario.FUNCIONARIO);
+                funcionarioService.salvar(funcionarioDto);
+                break;
+        }
+    }
+
+
 }
