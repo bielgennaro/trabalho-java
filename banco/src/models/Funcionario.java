@@ -1,5 +1,6 @@
 package models;
 
+import dto.UsuarioDto;
 import enums.ETipoUsuario;
 
 import java.time.LocalDate;
@@ -20,6 +21,20 @@ public class Funcionario extends Usuario {
 
     public Funcionario() {
         super();
+    }
+
+    public static Funcionario of(UsuarioDto dto) {
+        var funcionario = new Funcionario();
+        funcionario.setNome(dto.getNome());
+        funcionario.setCpf(dto.getCpf());
+        funcionario.setDataNascimento(converterDatas(dto.getDataNascimento()));
+        funcionario.setCrm(dto.getCrm());
+        funcionario.setCargo(dto.getCargo());
+        return funcionario;
+    }
+
+    private static LocalDate converterDatas(String data) {
+        return LocalDate.parse(data);
     }
 
     @Override

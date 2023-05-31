@@ -51,23 +51,28 @@ public class UsuarioService {
         return null;
     }
 
+    public boolean isFuncionario(Usuario usuario) {
+        return usuario.getTipoUsuario().equals(ETipoUsuario.FUNCIONARIO);
+    }
+
     public void cadastrarUsuario() {
         var scanner = new Scanner(System.in);
+        var dto = new UsuarioDto();
 
         System.out.println("+---------------------------+");
         System.out.println(" Digite seu nome:            ");
         System.out.println("+---------------------------+");
-        var nome = scanner.next();
+        dto.setNome(scanner.next());
 
         System.out.println("+---------------------------+");
         System.out.println(" Digite seu cpf:             ");
         System.out.println("+---------------------------+");
-        var cpf = scanner.next();
+        dto.setCpf(scanner.next());
 
         System.out.println("+---------------------------------+");
         System.out.println(" Digite sua data de nascimento:    ");
         System.out.println("+---------------------------------+");
-        var dataNascimento = scanner.next();
+        dto.setDataNascimento(scanner.next());
 
         System.out.println("+---------------------------+");
         System.out.println("Selecione o tipo de conta    ");
@@ -78,13 +83,11 @@ public class UsuarioService {
 
         switch (opcao) {
             case 1:
-                var clienteDto = new UsuarioDto(1, nome, cpf, dataNascimento, ETipoUsuario.CLIENTE);
-                clienteService.salvar(clienteDto);
+                clienteService.salvar(dto);
                 break;
 
             case 2:
-                var funcionarioDto = new UsuarioDto(1, nome, cpf, dataNascimento, ETipoUsuario.FUNCIONARIO);
-                funcionarioService.salvar(funcionarioDto);
+                funcionarioService.salvar(dto);
                 break;
         }
     }

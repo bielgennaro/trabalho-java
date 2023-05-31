@@ -9,13 +9,31 @@ public class UsuarioDto {
     String cpf;
     String dataNascimento;
     ETipoUsuario tipoUsuario;
+    String cargo;
+    Integer crm;
 
-    public UsuarioDto(Integer id, String nome, String cpf, String dataNascimento, ETipoUsuario tipoUsuario) {
+    public UsuarioDto(Integer id, String nome, String cpf, String dataNascimento,
+                      ETipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public UsuarioDto(Integer id, String nome, String cpf, String dataNascimento,
+                      ETipoUsuario tipoUsuario, String cargo, Integer crm) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.tipoUsuario = tipoUsuario;
+        this.cargo = cargo;
+        this.crm = crm;
+    }
+
+    public UsuarioDto() {
+
     }
 
     public Integer getId() {
@@ -56,5 +74,21 @@ public class UsuarioDto {
 
     public void setTipoUsuario(ETipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public Integer getCrm() {
+        return crm;
+    }
+
+    public void setCrm(Integer crm) {
+        this.crm = crm;
     }
 }
