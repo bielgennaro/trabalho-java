@@ -90,5 +90,6 @@ public class UsuarioService {
                 funcionarioService.salvar(dto);
                 break;
         }
+
     }
 }
