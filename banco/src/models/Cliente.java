@@ -1,5 +1,6 @@
 package models;
 
+import dto.UsuarioDto;
 import enums.ETipoUsuario;
 
 import java.time.LocalDate;
@@ -18,6 +19,18 @@ public class Cliente extends Usuario {
 
     }
 
+    public static Cliente of(UsuarioDto dto) {
+        var cliente = new Cliente();
+        cliente.setCpf(dto.getCpf());
+        cliente.setNome(dto.getNome());
+        cliente.setDataNascimento(converterDatas(dto.getDataNascimento()));
+        cliente.setTipoUsuario(ETipoUsuario.CLIENTE);
+        return cliente;
+    }
+
+    private static LocalDate converterDatas(String data) {
+        return LocalDate.parse(data);
+    }
 
 
     public Integer getId() {
