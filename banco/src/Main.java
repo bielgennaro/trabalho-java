@@ -5,18 +5,19 @@ import service.ServicoService;
 import service.UsuarioService;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Conexao conexao = new Conexao();
-
+        var conexao = new Conexao();
         Locale brasil = new Locale("PT", "BR");
+        Connection conn = conexao.conectar();
         DateFormat data = DateFormat.getDateInstance(DateFormat.FULL, brasil);
-        var contaService = new ContaService();
 
+        var contaService = new ContaService();
         var clienteService = new ClienteService();
         var servicoService = new ServicoService();
         var usuarioService = new UsuarioService();

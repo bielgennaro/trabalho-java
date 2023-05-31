@@ -5,11 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Conexao {
-    public static void main(String[] args) {
-        Conexao conexao = new Conexao();
-        Connection conn = conexao.conectar();
-    }
-
     public Connection conectar() {
         Connection conn = null;
         try {
