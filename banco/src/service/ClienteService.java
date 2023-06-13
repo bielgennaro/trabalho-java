@@ -5,11 +5,12 @@ import models.Cliente;
 import models.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClienteService implements UsuarioInterface {
 
     private final UsuarioService usuarioService = new UsuarioService();
-    ArrayList<Cliente> clientes = new ArrayList<>();
+    List<Cliente> clientes = new ArrayList<>();
 
     public Usuario getUsuariosByCpf(String cpf) {
         var usuario = clientes.stream()
@@ -52,5 +53,15 @@ public class ClienteService implements UsuarioInterface {
         cliente.setId(gerarId());
         clientes.add(cliente);
         System.out.println("Usuario criado com sucesso!");
+    }
+
+    @Override
+    public UsuarioDto getUsuarioById(Integer id) {
+        var cliente = clientes.stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        return UsuarioDto.convertClienteFrom(cliente);
     }
 }

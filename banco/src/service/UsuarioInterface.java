@@ -4,5 +4,7 @@ import dto.UsuarioDto;
 
 public interface UsuarioInterface {
 
-    public void salvar(UsuarioDto usuarioDto);
+    void salvar(UsuarioDto usuarioDto);
+
+    UsuarioDto getUsuarioById(Integer id);
 }

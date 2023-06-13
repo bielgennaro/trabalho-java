@@ -34,6 +34,16 @@ public class FuncionarioService implements UsuarioInterface {
         return dto;
     }
 
+    @Override
+    public UsuarioDto getUsuarioById(Integer id) {
+        var funcionario = funcionarios.stream()
+                .filter(f -> f.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        return UsuarioDto.convertFuncionarioFrom(funcionario);
+    }
+
     private void validarAutorizacaoCadastroFuncionario() {
         var usuario = usuarioService.getUsuarioAutenticado();
         if (!usuarioService.isFuncionario(usuario)) {

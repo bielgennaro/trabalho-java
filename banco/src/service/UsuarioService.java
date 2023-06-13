@@ -1,10 +1,9 @@
 package service;
 
-import dto.UsuarioDto;
 import enums.ETipoUsuario;
+import models.Conta;
 import models.Usuario;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class UsuarioService {
@@ -14,33 +13,31 @@ public class UsuarioService {
     private final ContaService contaService = new ContaService();
     private final FuncionarioService funcionarioService = new FuncionarioService();
 
-    public void logarUsuario() throws IOException {
+    public void logarUsuario() {
         var scanner = new Scanner(System.in);
 
         while (usuarioAutenticado == null) {
             System.out.println("+---------------------------+");
-            System.out.println(" Digite seu cpf:             ");
-            System.out.println("+---------------------------+");
-
-            var cpf = scanner.next();
-
-            System.out.println("+---------------------------+");
             System.out.println(" Digite sua conta:           ");
             System.out.println("+---------------------------+");
-
             var conta = scanner.nextInt();
 
-            var usuario = clienteService.getUsuariosByCpf(cpf);
-            var contaAutenticada = contaService.getContaByNumConta(conta);
+            System.out.println("+---------------------------+");
+            System.out.println(" Digite sua senha:           ");
+            System.out.println("+---------------------------+");
+            var senha = scanner.nextInt();
 
-            if (usuario == null || contaAutenticada == null) {
-                System.out.println("Credenciais invalidas");
-            }
-
-            usuarioAutenticado = usuario;
+            contaService.logarContaAutenticada(conta, senha);
+            autenticarUsuario(contaService.getContaAutenticada());
         }
 
         System.out.println("Bem vindo " + usuarioAutenticado.getNome());
+    }
+
+    public void deslogarUsuario() {
+        if (usuarioAutenticado != null) {
+            usuarioAutenticado = null;
+        }
     }
 
     public Usuario getUsuarioAutenticado() {
@@ -55,41 +52,21 @@ public class UsuarioService {
         return usuario.getTipoUsuario().equals(ETipoUsuario.FUNCIONARIO);
     }
 
-    public void cadastrarUsuario() {
-        var scanner = new Scanner(System.in);
-        var dto = new UsuarioDto();
+    public void consultarDadosDaConta() {
+        var usuario = isFuncionario(usuarioAutenticado) ?
+                funcionarioService.getUsuarioById(usuarioAutenticado.getId()) :
+                clienteService.getUsuarioById(usuarioAutenticado.getId());
 
         System.out.println("+---------------------------+");
-        System.out.println(" Digite seu nome:            ");
+        System.out.println("nome: " + usuario.getNome());
+        System.out.println("+cpf: " + usuario.getCpf());
+        System.out.println("+nome: " + usuario.getNome());
+        System.out.println("+cargo: " + usuario.getCargo());
+        System.out.println("+crm: " + usuario.getCrm());
         System.out.println("+---------------------------+");
-        dto.setNome(scanner.next());
+    }
 
-        System.out.println("+---------------------------+");
-        System.out.println(" Digite seu cpf:             ");
-        System.out.println("+---------------------------+");
-        dto.setCpf(scanner.next());
-
-        System.out.println("+---------------------------------+");
-        System.out.println(" Digite sua data de nascimento:    ");
-        System.out.println("+---------------------------------+");
-        dto.setDataNascimento(scanner.next());
-
-        System.out.println("+---------------------------+");
-        System.out.println("Selecione o tipo de conta    ");
-        System.out.println(" 1- Cliente                  ");
-        System.out.println(" 2- Funcionario              ");
-        System.out.println("+---------------------------+");
-        var opcao = scanner.nextInt();
-
-        switch (opcao) {
-            case 1:
-                clienteService.salvar(dto);
-                break;
-
-            case 2:
-                funcionarioService.salvar(dto);
-                break;
-        }
-
+    private void autenticarUsuario(Conta conta) {
+        usuarioAutenticado = conta.getUsuario();
     }
 }

@@ -4,15 +4,18 @@ import dto.UsuarioDto;
 import enums.ETipoUsuario;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Cliente extends Usuario {
 
     Integer id;
+    List<Conta> contas;
 
     public Cliente(Integer id, String nome, LocalDate dataNascimento, String cpf,
-                   ETipoUsuario tipoUsuario, Integer id1) {
+                   ETipoUsuario tipoUsuario, Integer id1, List<Conta> contas) {
         super(id, nome, dataNascimento, cpf, tipoUsuario);
         this.id = id1;
+        this.contas = contas;
     }
 
     public Cliente() {
@@ -39,5 +42,13 @@ public class Cliente extends Usuario {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
     }
 }

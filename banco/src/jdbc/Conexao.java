@@ -9,7 +9,7 @@ public class Conexao {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306", "root", "admin");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306", "root", "admin");
             System.out.println("Conectou no banco de dados.");
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

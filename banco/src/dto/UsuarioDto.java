@@ -1,6 +1,10 @@
 package dto;
 
 import enums.ETipoUsuario;
+import models.Cliente;
+import models.Funcionario;
+
+import java.time.LocalDate;
 
 public class UsuarioDto {
 
@@ -34,6 +38,28 @@ public class UsuarioDto {
 
     public UsuarioDto() {
 
+    }
+
+    public static UsuarioDto convertClienteFrom(Cliente cliente) {
+        var clienteDto = new UsuarioDto();
+        clienteDto.setNome(cliente.getNome());
+        clienteDto.setCpf(cliente.getCpf());
+        clienteDto.setDataNascimento(converterDatas(cliente.getDataNascimento()));
+        return clienteDto;
+    }
+
+    public static UsuarioDto convertFuncionarioFrom(Funcionario funcionario) {
+        var funcionarioDto = new UsuarioDto();
+        funcionarioDto.setNome(funcionario.getNome());
+        funcionarioDto.setCpf(funcionario.getCpf());
+        funcionarioDto.setDataNascimento(converterDatas(funcionario.getDataNascimento()));
+        funcionarioDto.setCargo(funcionario.getCargo());
+        funcionario.setCrm(funcionarioDto.getCrm());
+        return funcionarioDto;
+    }
+
+    private static String converterDatas(LocalDate data) {
+        return String.valueOf(data);
     }
 
     public Integer getId() {

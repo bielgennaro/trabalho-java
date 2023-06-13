@@ -4,19 +4,22 @@ import dto.UsuarioDto;
 import enums.ETipoUsuario;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Funcionario extends Usuario {
 
     Integer id;
     String cargo;
     Integer crm;
+    List<Conta> contas;
 
     public Funcionario(Integer id, String nome, LocalDate dataNascimento, String cpf, ETipoUsuario tipoUsuario,
-                       Integer id1, String cargo, Integer crm) {
+                       Integer id1, String cargo, Integer crm, List<Conta> contas) {
         super(id, nome, dataNascimento, cpf, tipoUsuario);
         this.id = id1;
         this.cargo = cargo;
         this.crm = crm;
+        this.contas = contas;
     }
 
     public Funcionario() {
@@ -61,5 +64,13 @@ public class Funcionario extends Usuario {
 
     public void setCrm(Integer crm) {
         this.crm = crm;
+    }
+
+    public List<Conta> getContas() {
+        return contas;
+    }
+
+    public void setContas(List<Conta> contas) {
+        this.contas = contas;
     }
 }

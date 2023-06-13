@@ -10,18 +10,20 @@ public class Conta {
     Float saldo;
     Float credito;
     Float limite;
+    Float limiteDisponivel;
     Integer senha;
     Usuario usuario;
 
     public Conta(Integer id, Integer agencia, Integer numConta,
                  Float saldo, Float credito, Float limite,
-                 Integer senha, Usuario usuario) {
+                 Float limiteDisponivel, Integer senha, Usuario usuario) {
         this.id = id;
         this.agencia = agencia;
         this.numConta = numConta;
         this.saldo = saldo;
         this.credito = credito;
         this.limite = limite;
+        this.limiteDisponivel = limiteDisponivel;
         this.usuario = usuario;
     }
 
@@ -33,6 +35,8 @@ public class Conta {
         conta.setId(dto.getId());
         conta.setNumConta(dto.getNumConta());
         conta.setLimite(dto.getLimite());
+        conta.setAgencia(dto.getAgencia());
+        conta.setLimiteDisponivel(dto.getLimite());
         conta.setUsuario(new Usuario(dto.getUsuarioId()));
         return conta;
     }
@@ -83,6 +87,14 @@ public class Conta {
 
     public void setLimite(Float limite) {
         this.limite = limite;
+    }
+
+    public Float getLimiteDisponivel() {
+        return limiteDisponivel;
+    }
+
+    public void setLimiteDisponivel(Float limiteDisponivel) {
+        this.limiteDisponivel = limiteDisponivel;
     }
 
     public Usuario getUsuario() {
