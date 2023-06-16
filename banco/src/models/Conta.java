@@ -30,12 +30,14 @@ public class Conta {
     public Conta() {
     }
 
-    public static Conta of(ContaDto dto) {
+    public static Conta of(ContaDto dto, Usuario usuario) {
         var conta = new Conta();
         conta.setId(dto.getId());
         conta.setNumConta(dto.getNumConta());
         conta.setLimite(dto.getLimite());
         conta.setAgencia(dto.getAgencia());
+        conta.setSenha(dto.getSenha());
+        conta.setUsuario(usuario);
         conta.setLimiteDisponivel(dto.getLimite());
         conta.setUsuario(new Usuario(dto.getUsuarioId()));
         return conta;

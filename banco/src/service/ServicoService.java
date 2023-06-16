@@ -2,19 +2,31 @@ package service;
 
 import dto.ContaDto;
 import dto.UsuarioDto;
+import models.Usuario;
 
 import java.util.Scanner;
 
 public class ServicoService {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private final ContaService contaService = new ContaService();
-    private final UsuarioService usuarioService = new UsuarioService();
-    private final ClienteService clienteService = new ClienteService();
-    private final FuncionarioService funcionarioService = new FuncionarioService();
+    private ContaService contaService;
+    private UsuarioService usuarioService;
+    private ClienteService clienteService;
+    private FuncionarioService funcionarioService;
+    private static Usuario usuarioAutenticado;
+
+    public ServicoService() {}
+
+
+    public ServicoService(ContaService contaService, UsuarioService usuarioService, ClienteService clienteService, FuncionarioService funcionarioService) {
+        this.contaService = contaService;
+        this.usuarioService = usuarioService;
+        this.clienteService = clienteService;
+        this.funcionarioService = funcionarioService;
+    }
 
     public void iniciaProjeto() {
-        while (usuarioService.getUsuarioAutenticado() == null) {
+        while (usuarioAutenticado == null) {
             System.out.println("+---------------------------+");
             System.out.println(" Selecione a opção desejada: ");
             System.out.println(" 1- Logar                    ");
@@ -28,7 +40,8 @@ public class ServicoService {
                     listarOpcoesDeInteracao();
                     break;
                 case 2:
-                    cadastrarUsuario();
+                    usuarioAutenticado = cadastrarUsuario();
+                    criarConta(usuarioAutenticado);
                     break;
             }
         }
@@ -55,7 +68,7 @@ public class ServicoService {
         }
     }
 
-    private void cadastrarUsuario() {
+    private Usuario cadastrarUsuario() {
         var dto = new UsuarioDto();
 
         System.out.println("+---------------------------+");
@@ -82,12 +95,14 @@ public class ServicoService {
 
         switch (opcao) {
             case 1:
-                clienteService.salvar(dto);
-                break;
+                var cliente = clienteService.salvar(dto);
+                return cliente;
             case 2:
-                funcionarioService.salvar(dto);
-                break;
+                var funcionario = funcionarioService.salvar(dto);
+                return funcionario;
         }
+
+        return null;
     }
 
     public void realizarOperacoes() {
@@ -116,7 +131,7 @@ public class ServicoService {
                 contaService.realizarPagamentos();
                 break;
             case 5:
-                criarConta();
+                criarConta(usuarioAutenticado);
                 break;
             case 6:
                 usuarioService.deslogarUsuario();
@@ -124,7 +139,7 @@ public class ServicoService {
         }
     }
 
-    private void criarConta() {
+    private void criarConta(Usuario usuario) {
         var dto = new ContaDto();
 
         System.out.println("+---------------------------+");
@@ -135,8 +150,13 @@ public class ServicoService {
         System.out.println("+---------------------------+");
         System.out.println(" Digite o valor da sua renda:");
         System.out.println("+---------------------------+");
-        var renda = scanner.nextFloat();
+        dto.setRenda(scanner.nextFloat());
 
-        contaService.criarConta(dto, renda);
+        System.out.println("+---------------------------+");
+        System.out.println(" Digite uma senha de numeros:");
+        System.out.println("+---------------------------+");
+        dto.setSenha(scanner.nextInt());
+
+        contaService.criarConta(dto, usuario);
     }
 }

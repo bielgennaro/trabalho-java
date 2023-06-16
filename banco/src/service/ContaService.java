@@ -3,20 +3,28 @@ package service;
 import dto.ContaDto;
 import jdbc.Conexao;
 import models.Conta;
+import models.Usuario;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ContaService {
 
     private static final Scanner scanner = new Scanner(System.in);
     private static Conta contaUsuarioAutenticado;
     ArrayList<Conta> contas = new ArrayList<>();
-    private final ClienteService clienteService = new ClienteService();
-    private final Conexao conexao = new Conexao();
+    ArrayList<Integer> numContas = new ArrayList<>();
+    private ClienteService clienteService;
+
+    public ContaService() {
+
+    }
+
+    public ContaService(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
+
 
     public Conta getContaByNumConta(Integer numConta) {
         var conta = contas.stream()
@@ -27,7 +35,7 @@ public class ContaService {
         return conta;
     }
 
-    public void logarContaAutenticada(Integer numConta, Integer senha) {
+    public Conta logarContaAutenticada(Integer numConta, Integer senha) {
         var conta = contas.stream()
                 .filter(c -> c.getNumConta().equals(numConta)
                         && c.getSenha().equals(senha))
@@ -39,6 +47,7 @@ public class ContaService {
         }
 
         contaUsuarioAutenticado = conta;
+        return contaUsuarioAutenticado;
     }
 
     public void ListarSaldoELimiteConta() {
@@ -66,6 +75,8 @@ public class ContaService {
         conta.setSaldo(conta.getSaldo() + valor);
         contaAutenticada.setSaldo(contaAutenticada.getSaldo() - valor);
         System.out.println("Transferência realizada com sucesso");
+        contas.set(getIndexConta(conta.getId()), conta);
+        atualizarContaAutenticada(contaAutenticada);
     }
 
     public void inserirNovoLimite() {
@@ -74,6 +85,7 @@ public class ContaService {
         System.out.println("Qual valor deseja para adicionar ao seu limite?");
         var novoLimite = scanner.nextFloat();
         contaAutenticada.setLimite(contaAutenticada.getLimite() + novoLimite);
+        atualizarContaAutenticada(contaAutenticada);
         System.out.println("Novo Limite adiconado com sucesso");
     }
 
@@ -85,17 +97,18 @@ public class ContaService {
         realizarTransferenciaEntreContas(valor, conta);
     }
 
-    private void realizarTransferenciasComContaCorrente(Float valor) {
+    private void realizarPagamentosComContaCorrente(Float valor) {
         var contaAutenticada = getContaAutenticada();
         validarSaldoConta(valor, contaAutenticada);
         contaAutenticada.setSaldo(contaAutenticada.getSaldo() - valor);
+        atualizarContaAutenticada(contaAutenticada);
     }
 
-    private void realizarTransferenciasComLimiteCredito(Float valor) {
+    private void realizarPagamentosComLimiteCredito(Float valor) {
         var contaAutenticada = getContaAutenticada();
         validarLimiteConta(valor, contaAutenticada);
-        contaAutenticada.setLimiteDisponivel(
-                contaAutenticada.getLimiteDisponivel() - valor);
+        contaAutenticada.setLimiteDisponivel(contaAutenticada.getLimiteDisponivel() - valor);
+        atualizarContaAutenticada(contaAutenticada);
     }
 
     public void realizarPagamentos() {
@@ -108,10 +121,10 @@ public class ContaService {
 
         switch (scanner.nextInt()) {
             case 1:
-                realizarTransferenciasComContaCorrente(valor);
+                realizarPagamentosComContaCorrente(valor);
                 break;
             case 2:
-                realizarTransferenciasComLimiteCredito(valor);
+                realizarPagamentosComLimiteCredito(valor);
                 break;
         }
 
@@ -125,12 +138,14 @@ public class ContaService {
                 .collect(Collectors.toList());
     }
 
-    public Conta criarConta(ContaDto dto, Float renda) {
-        dto.setLimite(calcularLimite(renda));
-        var novaConta = Conta.of(dto);
+    public Conta criarConta(ContaDto dto, Usuario usuario) {
+        dto.setLimite(calcularLimite(dto.getRenda()));
+        dto.setNumConta(gerarNumConta());
+        var novaConta = Conta.of(dto, usuario);
         novaConta.setId(gerarId());
         contas.add(novaConta);
         System.out.println("Conta criada com sucesso!");
+        System.out.println("Parabens o numero da sua conta é " +  novaConta.getNumConta());
         return novaConta;
     }
 
@@ -141,6 +156,28 @@ public class ContaService {
     private Integer gerarId() {
         var contaId = contas.size();
         return contaId + 1;
+    }
+
+    private Integer getIndexConta(Integer id) {
+        var indexOptional = IntStream.range(0, contas.size())
+                .filter(i -> contas.get(i).getId().equals(id))
+                .findFirst();
+
+        return indexOptional.getAsInt();
+    }
+
+    private void atualizarContaAutenticada(Conta contaAutenticada) {
+        contas.set(getIndexConta(contaAutenticada.getId()), contaAutenticada);
+    }
+
+    private Integer gerarNumConta() {
+        var random = new Random();
+        var numConta = 0;
+        while (numContas.contains(numConta)) {
+            numConta = random.nextInt(900000) + 100000;
+        }
+
+        return numConta;
     }
 
     public Conta getContaAutenticada() {

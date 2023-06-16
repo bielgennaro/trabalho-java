@@ -1,10 +1,11 @@
 package service;
 
 import dto.UsuarioDto;
+import models.Usuario;
 
 public interface UsuarioInterface {
 
-    void salvar(UsuarioDto usuarioDto);
+    Usuario salvar(UsuarioDto usuarioDto);
 
     UsuarioDto getUsuarioById(Integer id);
 }

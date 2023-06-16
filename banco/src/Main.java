@@ -1,18 +1,14 @@
-import jdbc.Conexao;
-import service.ServicoService;
-
-import java.sql.Connection;
-import java.text.DateFormat;
-import java.util.Locale;
+import service.*;
 
 public class Main {
     public static void main(String[] args) {
-        var conexao = new Conexao();
-        Locale brasil = new Locale("PT", "BR");
-        Connection conn = conexao.conectar();
-        DateFormat data = DateFormat.getDateInstance(DateFormat.FULL, brasil);
 
-        var servicoService = new ServicoService();
+        final ContaService contaService = new ContaService();
+        final ClienteService clienteService = new ClienteService();
+        final FuncionarioService funcionarioService = new FuncionarioService();
+        final UsuarioService usuarioService = new UsuarioService(clienteService, contaService, funcionarioService);
+
+        var servicoService = new ServicoService(contaService, usuarioService, clienteService, funcionarioService);
 
         servicoService.iniciaProjeto();
     }

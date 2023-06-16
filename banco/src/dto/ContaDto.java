@@ -12,9 +12,10 @@ public class ContaDto {
     Integer usuarioId;
     String usuarioNome;
     Float renda;
+    Integer senha;
 
     public ContaDto(Integer id, Integer agencia, Integer numConta, Float credito,
-                    Float limite, Integer usuarioId, String usuarioNome, Float renda) {
+                    Float limite, Integer usuarioId, String usuarioNome, Float renda, Integer senha) {
         this.id = id;
         this.agencia = agencia;
         this.numConta = numConta;
@@ -23,6 +24,7 @@ public class ContaDto {
         this.usuarioId = usuarioId;
         this.usuarioNome = usuarioNome;
         this.renda = renda;
+        this.senha = senha;
     }
 
     public ContaDto() {
@@ -95,5 +97,13 @@ public class ContaDto {
 
     public void setRenda(Float renda) {
         this.renda = renda;
+    }
+
+    public Integer getSenha() {
+        return senha;
+    }
+
+    public void setSenha(Integer senha) {
+        this.senha = senha;
     }
 }

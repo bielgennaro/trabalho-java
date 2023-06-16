@@ -2,22 +2,33 @@ package service;
 
 import dto.UsuarioDto;
 import models.Funcionario;
+import models.Usuario;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FuncionarioService implements UsuarioInterface {
 
-    private final UsuarioService usuarioService = new UsuarioService();
+    private UsuarioService usuarioService;
     ArrayList<Funcionario> funcionarios = new ArrayList<>();
 
+    public FuncionarioService() {
+
+    }
+
+    public FuncionarioService(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
     @Override
-    public void salvar(UsuarioDto dto) {
+    public Usuario salvar(UsuarioDto dto) {
         preencherDadosAdicionais(dto);
         validarAutorizacaoCadastroFuncionario();
         var funcionario = Funcionario.of(dto);
+        funcionario.setId(gerarId());
         funcionarios.add(funcionario);
         System.out.println("Funcionario cadastrado com sucesso");
+        return funcionario;
     }
 
     private UsuarioDto preencherDadosAdicionais(UsuarioDto dto) {
@@ -49,5 +60,10 @@ public class FuncionarioService implements UsuarioInterface {
         if (!usuarioService.isFuncionario(usuario)) {
             System.out.println("Usuario sem permissao para realizar cadastro de funcionarios");
         }
+    }
+
+    private Integer gerarId() {
+        var funcionario = funcionarios.size();
+        return funcionario + 1;
     }
 }

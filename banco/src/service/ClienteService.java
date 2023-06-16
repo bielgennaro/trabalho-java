@@ -9,8 +9,16 @@ import java.util.List;
 
 public class ClienteService implements UsuarioInterface {
 
-    private final UsuarioService usuarioService = new UsuarioService();
+    private UsuarioService usuarioService;
     List<Cliente> clientes = new ArrayList<>();
+
+    public ClienteService() {
+
+    }
+
+    public ClienteService(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     public Usuario getUsuariosByCpf(String cpf) {
         var usuario = clientes.stream()
@@ -48,11 +56,12 @@ public class ClienteService implements UsuarioInterface {
     }
 
     @Override
-    public void salvar(UsuarioDto usuarioDto) {
+    public Usuario salvar(UsuarioDto usuarioDto) {
         var cliente = Cliente.of(usuarioDto);
         cliente.setId(gerarId());
         clientes.add(cliente);
         System.out.println("Usuario criado com sucesso!");
+        return cliente;
     }
 
     @Override

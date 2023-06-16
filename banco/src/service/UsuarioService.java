@@ -9,14 +9,25 @@ import java.util.Scanner;
 public class UsuarioService {
 
     private static Usuario usuarioAutenticado;
-    private final ClienteService clienteService = new ClienteService();
-    private final ContaService contaService = new ContaService();
-    private final FuncionarioService funcionarioService = new FuncionarioService();
+    private static Conta contaUsuarioAutenticado;
+    private ClienteService clienteService;
+    private ContaService contaService;
+    private FuncionarioService funcionarioService;
+
+    public UsuarioService() {
+
+    }
+
+    public UsuarioService(ClienteService clienteService, ContaService contaService, FuncionarioService funcionarioService) {
+        this.clienteService = clienteService;
+        this.contaService = contaService;
+        this.funcionarioService = funcionarioService;
+    }
 
     public void logarUsuario() {
         var scanner = new Scanner(System.in);
 
-        while (usuarioAutenticado == null) {
+        while (usuarioAutenticado == null && contaUsuarioAutenticado == null) {
             System.out.println("+---------------------------+");
             System.out.println(" Digite sua conta:           ");
             System.out.println("+---------------------------+");
@@ -27,8 +38,8 @@ public class UsuarioService {
             System.out.println("+---------------------------+");
             var senha = scanner.nextInt();
 
-            contaService.logarContaAutenticada(conta, senha);
-            autenticarUsuario(contaService.getContaAutenticada());
+            contaUsuarioAutenticado = contaService.logarContaAutenticada(conta, senha);
+            usuarioAutenticado = autenticarUsuario(contaUsuarioAutenticado);
         }
 
         System.out.println("Bem vindo " + usuarioAutenticado.getNome());
@@ -66,7 +77,12 @@ public class UsuarioService {
         System.out.println("+---------------------------+");
     }
 
-    private void autenticarUsuario(Conta conta) {
-        usuarioAutenticado = conta.getUsuario();
+    private Usuario autenticarUsuario(Conta conta) {
+        if (conta != null) {
+            usuarioAutenticado = conta.getUsuario();
+            return usuarioAutenticado;
+        }
+
+        return null;
     }
 }

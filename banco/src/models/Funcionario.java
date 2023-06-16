@@ -4,6 +4,7 @@ import dto.UsuarioDto;
 import enums.ETipoUsuario;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Funcionario extends Usuario {
@@ -37,7 +38,7 @@ public class Funcionario extends Usuario {
     }
 
     private static LocalDate converterDatas(String data) {
-        return LocalDate.parse(data);
+        return LocalDate.parse(data, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     @Override
