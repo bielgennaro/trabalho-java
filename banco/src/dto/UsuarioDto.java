@@ -37,7 +37,6 @@ public class UsuarioDto {
     }
 
     public UsuarioDto() {
-
     }
 
     public static UsuarioDto convertClienteFrom(Cliente cliente) {

@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class FuncionarioService implements UsuarioInterface {
 
-    private UsuarioService usuarioService;
     ArrayList<Funcionario> funcionarios = new ArrayList<>();
+    private UsuarioService usuarioService;
 
     public FuncionarioService() {
 

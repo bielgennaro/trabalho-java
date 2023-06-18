@@ -4,7 +4,10 @@ import dto.ContaDto;
 import models.Conta;
 import models.Usuario;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -57,12 +60,6 @@ public class ContaService {
         System.out.println("Limite: " + contaAutenticada.getLimite());
     }
 
-    private void validarSaldoConta(Float valor, Conta conta) {
-        if (valor > conta.getSaldo()) {
-            System.out.println("Saldo insuficiente para realizar a transação");
-        }
-    }
-
     private void validarLimiteConta(Float valor, Conta conta) {
         if (valor > conta.getLimiteDisponivel()) {
             System.out.println("Limite insuficiente para realizar a transação");
@@ -71,10 +68,9 @@ public class ContaService {
 
     public void realizarTransferenciaEntreContas(Float valor, Conta conta) {
         var contaAutenticada = getContaAutenticada();
-        validarSaldoConta(valor, contaAutenticada);
+        valor = validarSaldoConta(contaAutenticada, valor);
         conta.setSaldo(conta.getSaldo() + valor);
         contaAutenticada.setSaldo(contaAutenticada.getSaldo() - valor);
-        System.out.println("Transferência realizada com sucesso");
         contas.set(getIndexConta(conta.getId()), conta);
         atualizarContaAutenticada(contaAutenticada);
     }
@@ -85,6 +81,7 @@ public class ContaService {
         System.out.println("Qual valor deseja para adicionar ao seu limite?");
         var novoLimite = Float.parseFloat(scanner.next());
         contaAutenticada.setLimite(contaAutenticada.getLimite() + novoLimite);
+        contaAutenticada.setLimiteDisponivel(contaAutenticada.getLimiteDisponivel() + novoLimite);
         atualizarContaAutenticada(contaAutenticada);
         System.out.println("Novo Limite adiconado com sucesso");
     }
@@ -95,11 +92,21 @@ public class ContaService {
         System.out.println("Digite o valor da transferência");
         var valor = Float.parseFloat(scanner.next());
         realizarTransferenciaEntreContas(valor, conta);
+        System.out.println("Transferência realizada com sucesso");
+    }
+
+    private Float validarSaldoConta(Conta conta, float valor) {
+        while (valor > conta.getSaldo()) {
+            System.out.println("Saldo insuficiente para realizar a transação");
+            System.out.println("Digite outro para a transferência");
+            valor = Float.parseFloat(scanner.next());
+        }
+        return valor;
     }
 
     private void realizarPagamentosComContaCorrente(Float valor) {
         var contaAutenticada = getContaAutenticada();
-        validarSaldoConta(valor, contaAutenticada);
+        valor = validarSaldoConta(contaAutenticada, valor);
         contaAutenticada.setSaldo(contaAutenticada.getSaldo() - valor);
         atualizarContaAutenticada(contaAutenticada);
     }
@@ -116,7 +123,7 @@ public class ContaService {
         var valor = Float.parseFloat(scanner.next());
 
         System.out.println("Selecione como ira pagar:        ");
-        System.out.println(" 1- Saldo conta corrente corrente");
+        System.out.println(" 1- Saldo conta corrente         ");
         System.out.println(" 2- Saldo do limite de crédito   ");
 
         switch (scanner.nextInt()) {
@@ -145,12 +152,19 @@ public class ContaService {
         novaConta.setId(gerarId());
         contas.add(novaConta);
         System.out.println("Conta criada com sucesso!");
-        System.out.println("Parabens o numero da sua conta é " +  novaConta.getNumConta());
+        System.out.println("Parabens o numero da sua conta é " + novaConta.getNumConta());
         return novaConta;
     }
 
+    public void depositarDinheiro() {
+        System.out.println("Digite o valor que queira depositar");
+        var valor = Float.parseFloat(scanner.next());
+        contaUsuarioAutenticado.setSaldo(contaUsuarioAutenticado.getSaldo() + valor);
+        System.out.println("Deposito realizado com sucesso");
+    }
+
     private Float calcularLimite(Float renda) {
-        return (renda/100)*80;
+        return (renda / 100) * 80;
     }
 
     private Integer gerarId() {
@@ -173,7 +187,7 @@ public class ContaService {
     private Integer gerarNumConta() {
         var random = new Random();
         var numConta = 0;
-        while (numContas.contains(numConta)) {
+        while (numContas.contains(numConta) || numConta == 0) {
             numConta = random.nextInt(900000) + 100000;
         }
 
@@ -195,6 +209,7 @@ public class ContaService {
 
     private ContaDto umaContaPadrao() {
         var conta = new ContaDto();
+        conta.setId(1);
         conta.setNumConta(1234);
         conta.setAgencia(2020);
         conta.setSenha(123456);
