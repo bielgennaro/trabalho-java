@@ -39,7 +39,7 @@ public class Conta {
         conta.setSenha(dto.getSenha());
         conta.setUsuario(usuario);
         conta.setLimiteDisponivel(dto.getLimite());
-        conta.setUsuario(new Usuario(dto.getUsuarioId()));
+        conta.setSaldo(0F);
         return conta;
     }
 

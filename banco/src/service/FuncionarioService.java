@@ -1,6 +1,7 @@
 package service;
 
 import dto.UsuarioDto;
+import enums.ETipoUsuario;
 import models.Funcionario;
 import models.Usuario;
 
@@ -65,5 +66,23 @@ public class FuncionarioService implements UsuarioInterface {
     private Integer gerarId() {
         var funcionario = funcionarios.size();
         return funcionario + 1;
+    }
+
+    public Usuario cadastrarFuncionarioPadrao() {
+        var funcionario = Funcionario.of(umFuncionario());
+        funcionarios.add(funcionario);
+        return funcionario;
+    }
+
+    private UsuarioDto umFuncionario() {
+        var usuario = new UsuarioDto();
+        usuario.setId(1);
+        usuario.setCargo("Gerente");
+        usuario.setNome("ADM");
+        usuario.setCpf("108.007.889-40");
+        usuario.setCrm(123);
+        usuario.setDataNascimento("20-09-2003");
+        usuario.setTipoUsuario(ETipoUsuario.FUNCIONARIO);
+        return usuario;
     }
 }

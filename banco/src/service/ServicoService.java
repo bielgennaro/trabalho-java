@@ -26,6 +26,7 @@ public class ServicoService {
     }
 
     public void iniciaProjeto() {
+        cadastrarContaPadrao();
         while (usuarioAutenticado == null) {
             System.out.println("+---------------------------+");
             System.out.println(" Selecione a opção desejada: ");
@@ -36,12 +37,12 @@ public class ServicoService {
 
             switch (opcao) {
                 case 1:
-                    usuarioService.logarUsuario();
+                    usuarioAutenticado = usuarioService.logarUsuario();
                     listarOpcoesDeInteracao();
                     break;
                 case 2:
-                    usuarioAutenticado = cadastrarUsuario();
-                    criarConta(usuarioAutenticado);
+                    var usuario = cadastrarUsuario();
+                    criarConta(usuario);
                     break;
             }
         }
@@ -52,19 +53,21 @@ public class ServicoService {
     }
 
     private void listarOpcoesDeInteracao() {
-        System.out.println("+----------------------------+");
-        System.out.println(" 1- Consultar dados           ");
-        System.out.println(" 2- Realizar operações        ");
-        System.out.println("+----------------------------+");
-        var opcao = scanner.nextInt();
+        while (usuarioAutenticado != null) {
+            System.out.println("+----------------------------+");
+            System.out.println(" 1- Consultar dados           ");
+            System.out.println(" 2- Realizar operações        ");
+            System.out.println("+----------------------------+");
+            var opcao = scanner.nextInt();
 
-        switch (opcao) {
-            case 1:
-                usuarioService.consultarDadosDaConta();
-                break;
-            case 2:
-                realizarOperacoes();
-                break;
+            switch (opcao) {
+                case 1:
+                    usuarioService.consultarDadosDaConta();
+                    break;
+                case 2:
+                    realizarOperacoes();
+                    break;
+            }
         }
     }
 
@@ -134,7 +137,7 @@ public class ServicoService {
                 criarConta(usuarioAutenticado);
                 break;
             case 6:
-                usuarioService.deslogarUsuario();
+                deslogarUsuario();
                 break;
         }
     }
@@ -150,7 +153,7 @@ public class ServicoService {
         System.out.println("+---------------------------+");
         System.out.println(" Digite o valor da sua renda:");
         System.out.println("+---------------------------+");
-        dto.setRenda(scanner.nextFloat());
+        dto.setRenda(Float.parseFloat(scanner.next()));
 
         System.out.println("+---------------------------+");
         System.out.println(" Digite uma senha de numeros:");
@@ -158,5 +161,17 @@ public class ServicoService {
         dto.setSenha(scanner.nextInt());
 
         contaService.criarConta(dto, usuario);
+    }
+
+    private void deslogarUsuario() {
+        if (usuarioAutenticado != null) {
+            usuarioService.deslogarUsuario();
+            usuarioAutenticado = null;
+        }
+    }
+
+    private void cadastrarContaPadrao() {
+        var usuario = funcionarioService.cadastrarFuncionarioPadrao();
+        contaService.cadastrarContaPadrao(usuario);
     }
 }

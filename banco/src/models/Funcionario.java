@@ -29,11 +29,13 @@ public class Funcionario extends Usuario {
 
     public static Funcionario of(UsuarioDto dto) {
         var funcionario = new Funcionario();
+        funcionario.setId(dto.getId());
         funcionario.setNome(dto.getNome());
         funcionario.setCpf(dto.getCpf());
         funcionario.setDataNascimento(converterDatas(dto.getDataNascimento()));
         funcionario.setCrm(dto.getCrm());
         funcionario.setCargo(dto.getCargo());
+        funcionario.setTipoUsuario(dto.getTipoUsuario());
         return funcionario;
     }
 

@@ -1,7 +1,6 @@
 package service;
 
 import dto.ContaDto;
-import jdbc.Conexao;
 import models.Conta;
 import models.Usuario;
 
@@ -16,15 +15,16 @@ public class ContaService {
     ArrayList<Conta> contas = new ArrayList<>();
     ArrayList<Integer> numContas = new ArrayList<>();
     private ClienteService clienteService;
+    private FuncionarioService funcionarioService;
 
     public ContaService() {
 
     }
 
-    public ContaService(ClienteService clienteService) {
+    public ContaService(ClienteService clienteService, FuncionarioService funcionarioService) {
         this.clienteService = clienteService;
+        this.funcionarioService = funcionarioService;
     }
-
 
     public Conta getContaByNumConta(Integer numConta) {
         var conta = contas.stream()
@@ -83,7 +83,7 @@ public class ContaService {
         var contaAutenticada = getContaAutenticada();
         System.out.println("Seu limite total no momente é de " + contaAutenticada.getLimite());
         System.out.println("Qual valor deseja para adicionar ao seu limite?");
-        var novoLimite = scanner.nextFloat();
+        var novoLimite = Float.parseFloat(scanner.next());
         contaAutenticada.setLimite(contaAutenticada.getLimite() + novoLimite);
         atualizarContaAutenticada(contaAutenticada);
         System.out.println("Novo Limite adiconado com sucesso");
@@ -93,7 +93,7 @@ public class ContaService {
         System.out.println("Digite o numero da conta de quem quer realizar a transferência");
         var conta = getContaByNumConta(scanner.nextInt());
         System.out.println("Digite o valor da transferência");
-        var valor = scanner.nextFloat();
+        var valor = Float.parseFloat(scanner.next());
         realizarTransferenciaEntreContas(valor, conta);
     }
 
@@ -113,7 +113,7 @@ public class ContaService {
 
     public void realizarPagamentos() {
         System.out.println("Digite o valor do pagamente");
-        var valor = scanner.nextFloat();
+        var valor = Float.parseFloat(scanner.next());
 
         System.out.println("Selecione como ira pagar:        ");
         System.out.println(" 1- Saldo conta corrente corrente");
@@ -177,7 +177,8 @@ public class ContaService {
             numConta = random.nextInt(900000) + 100000;
         }
 
-        return numConta;
+        var numContaFormatado = String.format("%06d", numConta);
+        return Integer.parseInt(numContaFormatado);
     }
 
     public Conta getContaAutenticada() {
@@ -186,5 +187,20 @@ public class ContaService {
         }
 
         return null;
+    }
+
+    public void cadastrarContaPadrao(Usuario usuario) {
+        contas.add(Conta.of(umaContaPadrao(), usuario));
+    }
+
+    private ContaDto umaContaPadrao() {
+        var conta = new ContaDto();
+        conta.setNumConta(1234);
+        conta.setAgencia(2020);
+        conta.setSenha(123456);
+        conta.setLimite(3000.000F);
+        conta.setRenda(50000000.000F);
+        conta.setUsuarioId(1);
+        return conta;
     }
 }

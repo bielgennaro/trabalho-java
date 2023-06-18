@@ -12,9 +12,7 @@ public class ClienteService implements UsuarioInterface {
     private UsuarioService usuarioService;
     List<Cliente> clientes = new ArrayList<>();
 
-    public ClienteService() {
-
-    }
+    public ClienteService() {}
 
     public ClienteService(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;

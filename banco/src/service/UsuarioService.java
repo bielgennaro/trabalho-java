@@ -24,7 +24,7 @@ public class UsuarioService {
         this.funcionarioService = funcionarioService;
     }
 
-    public void logarUsuario() {
+    public Usuario logarUsuario() {
         var scanner = new Scanner(System.in);
 
         while (usuarioAutenticado == null && contaUsuarioAutenticado == null) {
@@ -43,12 +43,7 @@ public class UsuarioService {
         }
 
         System.out.println("Bem vindo " + usuarioAutenticado.getNome());
-    }
-
-    public void deslogarUsuario() {
-        if (usuarioAutenticado != null) {
-            usuarioAutenticado = null;
-        }
+        return usuarioAutenticado;
     }
 
     public Usuario getUsuarioAutenticado() {
@@ -64,16 +59,19 @@ public class UsuarioService {
     }
 
     public void consultarDadosDaConta() {
-        var usuario = isFuncionario(usuarioAutenticado) ?
+        var funcionario = isFuncionario(usuarioAutenticado);
+        var usuario = funcionario ?
                 funcionarioService.getUsuarioById(usuarioAutenticado.getId()) :
                 clienteService.getUsuarioById(usuarioAutenticado.getId());
 
         System.out.println("+---------------------------+");
         System.out.println("nome: " + usuario.getNome());
-        System.out.println("+cpf: " + usuario.getCpf());
-        System.out.println("+nome: " + usuario.getNome());
-        System.out.println("+cargo: " + usuario.getCargo());
-        System.out.println("+crm: " + usuario.getCrm());
+        System.out.println("cpf: " + usuario.getCpf());
+
+        if (funcionario) {
+            System.out.println("cargo: " + usuario.getCargo());
+            System.out.println("crm: " + usuario.getCrm());
+        }
         System.out.println("+---------------------------+");
     }
 
@@ -84,5 +82,12 @@ public class UsuarioService {
         }
 
         return null;
+    }
+
+    public void deslogarUsuario() {
+        if (usuarioAutenticado != null && contaUsuarioAutenticado != null) {
+            usuarioAutenticado = null;
+            contaUsuarioAutenticado = null;
+        }
     }
 }
