@@ -2,10 +2,12 @@ package service;
 
 import dto.UsuarioDto;
 import models.Cliente;
+import models.Conta;
 import models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ClienteService implements UsuarioInterface {
 
@@ -19,13 +21,14 @@ public class ClienteService implements UsuarioInterface {
         this.usuarioService = usuarioService;
     }
 
-    public Usuario getUsuariosByCpf(String cpf) {
+    @Override
+    public UsuarioDto getUsuariosByCpf(String cpf) {
         var usuario = clientes.stream()
                 .filter(u -> u.getCpf().equalsIgnoreCase(cpf))
                 .findFirst()
                 .orElse(null);
 
-        return usuario;
+        return UsuarioDto.convertClienteFrom(usuario);
     }
 
     public Usuario getUsuariosById(Integer id) {
@@ -41,12 +44,22 @@ public class ClienteService implements UsuarioInterface {
         return usuario;
     }
 
-    public Usuario cadastrarUsuario(UsuarioDto dto) {
-        var novoUsuario = Cliente.of(dto);
-        novoUsuario.setId(gerarId());
-        clientes.add(novoUsuario);
-        System.out.println("Usuario criado com sucesso!");
-        return novoUsuario;
+    @Override
+    public void getAll() {
+        clientes.forEach(cliente -> {
+            System.out.println("+--------------------------------+");
+            System.out.println(" nome:" + cliente.getNome());
+            System.out.println(" cpf:" + cliente.getCpf());
+            listarContaUsuario(cliente.getContas());
+            System.out.println("+--------------------------------+");
+        });
+    }
+
+    private void listarContaUsuario(List<Conta> contas) {
+        System.out.println(" Contas do usuario");
+        contas.forEach(conta -> {
+            System.out.println(" conta:" + conta.getNumConta());
+        });
     }
 
     private Integer gerarId() {
@@ -56,11 +69,16 @@ public class ClienteService implements UsuarioInterface {
 
     @Override
     public Usuario salvar(UsuarioDto usuarioDto) {
-        var cliente = Cliente.of(usuarioDto);
-        cliente.setId(gerarId());
-        clientes.add(cliente);
-        System.out.println("Usuario criado com sucesso!");
-        return cliente;
+        try {
+            var cliente = Cliente.of(usuarioDto);
+            cliente.setId(gerarId());
+            clientes.add(cliente);
+            System.out.println("Usuario criado com sucesso!");
+            return cliente;
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar usuario");
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -71,5 +89,30 @@ public class ClienteService implements UsuarioInterface {
                 .orElse(null);
 
         return UsuarioDto.convertClienteFrom(cliente);
+    }
+
+    public void cadastrarContas(Usuario usuario, Conta conta) {
+        var usuarioById = clientes.stream()
+                .filter(u -> u.getId().equals(usuario.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (usuarioById != null) {
+            List<Conta> contas = usuarioById.getContas();
+            if (contas == null) {
+                contas = new ArrayList<>();
+            }
+            contas.add(conta);
+            usuarioById.setContas(contas);
+            clientes.set(getIndexConta(usuario.getId()), usuarioById);
+        }
+    }
+
+    private Integer getIndexConta(Integer id) {
+        var indexOptional = IntStream.range(0, clientes.size())
+                .filter(i -> clientes.get(i).getId().equals(id))
+                .findFirst();
+
+        return indexOptional.getAsInt();
     }
 }

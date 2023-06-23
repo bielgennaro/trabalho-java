@@ -1,14 +1,13 @@
 package service;
 
 import dto.ContaDto;
+import enums.ETipoUsuario;
 import models.Conta;
 import models.Usuario;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ContaService {
@@ -138,22 +137,30 @@ public class ContaService {
         System.out.println("Pagamento realizado com sucesso");
     }
 
-    public List<Conta> getContasByUsuarioId(Integer id) {
-        var usuario = clienteService.getUsuariosById(id);
-        return contas.stream()
-                .filter(c -> c.getUsuario().equals(usuario))
-                .collect(Collectors.toList());
+    public Conta criarConta(ContaDto dto, Usuario usuario) {
+        try {
+            dto.setLimite(calcularLimite(dto.getRenda()));
+            dto.setNumConta(gerarNumConta());
+            var novaConta = Conta.of(dto, usuario);
+            novaConta.setId(gerarId());
+            contas.add(novaConta);
+            cadastrarContaUsuario(usuario, novaConta);
+            System.out.println("Conta criada com sucesso!");
+            System.out.println("Parabens o numero da sua conta é " + novaConta.getNumConta());
+            return novaConta;
+
+        } catch (Exception e) {
+            System.out.println("Erro ao criar conta");
+            throw new RuntimeException(e);
+        }
     }
 
-    public Conta criarConta(ContaDto dto, Usuario usuario) {
-        dto.setLimite(calcularLimite(dto.getRenda()));
-        dto.setNumConta(gerarNumConta());
-        var novaConta = Conta.of(dto, usuario);
-        novaConta.setId(gerarId());
-        contas.add(novaConta);
-        System.out.println("Conta criada com sucesso!");
-        System.out.println("Parabens o numero da sua conta é " + novaConta.getNumConta());
-        return novaConta;
+    private void cadastrarContaUsuario(Usuario usuario, Conta novaConta) {
+        if (usuario.getTipoUsuario() == ETipoUsuario.CLIENTE) {
+            clienteService.cadastrarContas(usuario, novaConta);
+        } else {
+            funcionarioService.cadastrarContas(usuario, novaConta);
+        }
     }
 
     public void depositarDinheiro() {

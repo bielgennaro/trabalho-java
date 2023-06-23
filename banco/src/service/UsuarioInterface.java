@@ -8,4 +8,9 @@ public interface UsuarioInterface {
     Usuario salvar(UsuarioDto usuarioDto);
 
     UsuarioDto getUsuarioById(Integer id);
+
+    UsuarioDto getUsuariosByCpf(String cpf);
+
+    void getAll();
+
 }
